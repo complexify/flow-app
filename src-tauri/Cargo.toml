@@ -1,0 +1,28 @@
+[package]
+name = "flow"
+version = "0.0.0"
+description = "An expense tracker"
+authors = ["complex solutions"]
+license = ""
+repository = ""
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.4", features = [] }
+
+[dependencies]
+tauri = { version = "1.4", features = [ "window-hide", "os-all", "window-unminimize", "window-set-title", "window-close", "window-maximize", "window-show", "window-minimize", "window-unmaximize", "window-start-dragging", "shell-open"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri-plugin-deep-link = { git = "https://github.com/FabianLars/tauri-plugin-deep-link", branch = "main" }
+url = "2.3.3"
+window-shadows = "0.2.1"
+settimeout = "0.1.2"
+tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]

@@ -1,0 +1,37 @@
+{
+  "tauri": {
+    "windows": [
+      {
+        "title": "flow Loader",
+        "width": 400,
+        "height": 300,
+        "decorations": false,
+        "transparent": true,
+        "url": "../src/splash/splashscreen.html",
+        "label": "splashscreen",
+        "minWidth": 400,
+        "minHeight": 300,
+        "center": true,
+        "alwaysOnTop": true,
+        "resizable": false,
+        "fullscreen": false,
+        "maximizable": false
+      },
+      {
+        "label": "main",
+        "fullscreen": false,
+        "resizable": false,
+        "title": "flow",
+        "width": 1215,
+        "height": 692,
+        "minWidth": 1215,
+        "minHeight": 692,
+        "visible": false,
+        "center": true,
+        "decorations": false,
+        "transparent": true,
+        "maximizable": false
+      }
+    ]
+  }
+}
