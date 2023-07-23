@@ -12,7 +12,7 @@ import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 import AccountContent from "./components/pages/Account";
 import { Button } from "./components/ui/button";
-import { WebviewWindow } from "@tauri-apps/api/window";
+// import { WebviewWindow } from "@tauri-apps/api/window";
 const osType = await type();
 const store = new Store("token.dat");
 if (osType == "Windows_NT") invoke("set_window_shadow");
@@ -24,21 +24,21 @@ function App() {
   const [user, setUser] = useState<User>();
   // const [loading, setLoading] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
-  const [windows, setWindows] = useState<any>([]);
-  const createWindow = () => {
-    setWindows((prevState: any) => {
-      console.log(windows)
-      const newWindowMeta = { id: `${Date.now()}` };
-      const webview = new WebviewWindow(newWindowMeta.id, {
-        url: "https://www.youtube.com/watch?v=aonOU1ZHJW8&t=2704s&ab_channel=JacobBolda",
-        center: true,
-        decorations: false
-      });
-      const nextState = prevState.concat([newWindowMeta])
-      return nextState;
-    })
+  // const [windows, setWindows] = useState<any>([]);
+  // const createWindow = () => {
+  //   setWindows((prevState: any) => {
+  //     console.log(windows)
+  //     const newWindowMeta = { id: `${Date.now()}` };
+  //     const webview = new WebviewWindow(newWindowMeta.id, {
+  //       url: "https://www.youtube.com/watch?v=aonOU1ZHJW8&t=2704s&ab_channel=JacobBolda",
+  //       center: true,
+  //       decorations: false
+  //     });
+  //     const nextState = prevState.concat([newWindowMeta])
+  //     return nextState;
+  //   })
     
-  }
+  // }
   useEffect(() => {
     const getToken = async () => {
       // setLoading(true);

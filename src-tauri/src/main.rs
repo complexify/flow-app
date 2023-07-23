@@ -86,12 +86,11 @@ fn main() {
             let handle = app.handle();
             register_deeplink(handle);
             Ok(())
-        }).on_window_event(move |event| match event.event() {
-      WindowEvent::Destroyed => {
-        println!("Closing Process");
-        std::process::exit(0x0);
-      }
-      _ => {}
+        }).on_window_event(|event| match event.event() {
+            tauri::WindowEvent::CloseRequested { api, .. } => {
+                std::process::exit(0x0);
+            }
+            _ => {}
     })  
         .plugin(tauri_plugin_store::Builder::default().build())
         .invoke_handler(tauri::generate_handler![

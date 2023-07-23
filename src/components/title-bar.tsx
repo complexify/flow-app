@@ -3,6 +3,7 @@ import { X, Minus } from "lucide-react";
 import { appWindow } from "@tauri-apps/api/window";
 import { Button } from "./ui/button";
 import { invoke } from "@tauri-apps/api";
+
 const TitleBar: React.FC = ({}) => {
   return (
     <div

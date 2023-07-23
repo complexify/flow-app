@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import TitleBar from "../components/title-bar";
+// import TitleBar from "../components/title-bar";
 import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 // import { open } from "@tauri-apps/api/shell";
@@ -30,58 +30,6 @@ export type User = {
 };
 
 const Splash: React.FC = ({}) => {
-  // const [schemeRequest, setSchemeRequest] = useState("");
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const unlisten = async () => {
-  //     const val = await store.get("authToken");
-  //     console.log(val);
-  //     if (!val) {
-  //       1;
-  //       setLoading(false);
-  //       await listen("scheme-request-received", async (event) => {
-  //         console.log("RECEIVED", event.payload);
-
-  //         if (Array.isArray(event.payload)) {
-  //           const authtoken = event.payload.find(
-  //             (param) => param.key === "authtoken"
-  //           )?.value;
-
-  //           if (authtoken) {
-  //             // setSchemeRequest(authtoken);
-  //             const response = await axios.get<any>(
-  //               `https://discord.com/api/v10/users/@me`,
-  //               {
-  //                 headers: { Authorization: `Bearer ${authtoken}` },
-  //               }
-  //             );
-  //             console.log(response);
-  //             setSchemeRequest(response.data.username);
-  //             await store.set("authToken", { value: authtoken });
-  //             await store.save();
-  //             setLoading(false);
-  //             invoke("close_splashscreen");
-  //           }
-  //         }
-  //       });
-  //     } else {
-  //       invoke("close_splashscreen");
-  //     }
-  //   };
-
-  //   unlisten(); // Assuming unlisten function is provided by Tauri
-
-  //   return () => {
-  //     unlisten();
-  //   };
-  // }, []);
-
-  // function process() {
-  //   setLoading(true);
-  //   open("http://localhost:3000/?authType=app");
-  //   // invoke("close_splashscreen");
-  // }
 
   useEffect(() => {
     // define a custom handler function
@@ -140,7 +88,7 @@ const Splash: React.FC = ({}) => {
     };
 
     // Set up the timer using setTimeout
-    const timer = setTimeout(executeAfterFiveSeconds, 5000);
+    const timer = setTimeout(executeAfterFiveSeconds, 2000);
 
     // Clear the timer if the component unmounts or if the dependencies change
     return () => clearTimeout(timer);
@@ -149,10 +97,9 @@ const Splash: React.FC = ({}) => {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TitleBar />
-      <div
-        className={`flex flex-col min-h-[calc(100vh-80px)] justify-center items-center`}
-      >
+      {/* <TitleBar /> */}
+      {/*  min-h-[calc(100vh-80px)] */}
+      <div className={`flex flex-col min-h-screen justify-center items-center`}>
         <h1 className="text-3xl m-2">Flow</h1>
         <LoadingOverlay />
       </div>
