@@ -3,12 +3,11 @@ import TitleBar from "../components/title-bar";
 import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 // import { open } from "@tauri-apps/api/shell";
-// import { listen } from "@tauri-apps/api/event";
-import LoadingOverlay from "@/components/loader";
+import { listen } from "@tauri-apps/api/event";
 // import axios from "axios";
 // import { Store } from "tauri-plugin-store-api";
 import { ThemeProvider } from "@/components/theme-provider";
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 const osType = await type();
 // const store = new Store("token.dat");
 export type User = {
@@ -29,59 +28,30 @@ export type User = {
   public_flags?: number;
 };
 
-const Splash: React.FC = ({}) => {
-  // const [schemeRequest, setSchemeRequest] = useState("");
-  // const [loading, setLoading] = useState(true);
+const Preload: React.FC = ({}) => {
+  async function process() {
+    invoke("open_client");
+  }
 
-  // useEffect(() => {
-  //   const unlisten = async () => {
-  //     const val = await store.get("authToken");
-  //     console.log(val);
-  //     if (!val) {
-  //       1;
-  //       setLoading(false);
-  //       await listen("scheme-request-received", async (event) => {
-  //         console.log("RECEIVED", event.payload);
+  useEffect(() => {
+    const unlisten = async () => {
+      await listen("scheme-request-received", async (event) => {
+        console.log("RECEIVED", event.payload);
 
-  //         if (Array.isArray(event.payload)) {
-  //           const authtoken = event.payload.find(
-  //             (param) => param.key === "authtoken"
-  //           )?.value;
+        if (Array.isArray(event.payload)) {
+          const authtoken = event.payload.find(
+            (param) => param.key === "authtoken"
+          )?.value;
+          console.log(authtoken);
+        }
+      });
+    };
 
-  //           if (authtoken) {
-  //             // setSchemeRequest(authtoken);
-  //             const response = await axios.get<any>(
-  //               `https://discord.com/api/v10/users/@me`,
-  //               {
-  //                 headers: { Authorization: `Bearer ${authtoken}` },
-  //               }
-  //             );
-  //             console.log(response);
-  //             setSchemeRequest(response.data.username);
-  //             await store.set("authToken", { value: authtoken });
-  //             await store.save();
-  //             setLoading(false);
-  //             invoke("close_splashscreen");
-  //           }
-  //         }
-  //       });
-  //     } else {
-  //       invoke("close_splashscreen");
-  //     }
-  //   };
-
-  //   unlisten(); // Assuming unlisten function is provided by Tauri
-
-  //   return () => {
-  //     unlisten();
-  //   };
-  // }, []);
-
-  // function process() {
-  //   setLoading(true);
-  //   open("http://localhost:3000/?authType=app");
-  //   // invoke("close_splashscreen");
-  // }
+    unlisten();
+    return () => {
+      unlisten();
+    };
+  }, []);
 
   useEffect(() => {
     // define a custom handler function
@@ -132,20 +102,6 @@ const Splash: React.FC = ({}) => {
   } else if (osType == "Linux" || osType == "Darwin") {
     disable_web_functions();
   }
-  useEffect(() => {
-    // Function to be executed after 5 seconds
-    const executeAfterFiveSeconds = () => {
-      invoke("close_splashscreen");
-      // Replace the above console.log with your desired command
-    };
-
-    // Set up the timer using setTimeout
-    const timer = setTimeout(executeAfterFiveSeconds, 5000);
-
-    // Clear the timer if the component unmounts or if the dependencies change
-    return () => clearTimeout(timer);
-  }, []);
-
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -154,10 +110,10 @@ const Splash: React.FC = ({}) => {
         className={`flex flex-col min-h-[calc(100vh-80px)] justify-center items-center`}
       >
         <h1 className="text-3xl m-2">Flow</h1>
-        <LoadingOverlay />
+        <Button onClick={process}>Open Client</Button>
       </div>
     </ThemeProvider>
   );
 };
 
-export default Splash;
+export default Preload;

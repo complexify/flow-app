@@ -7,10 +7,12 @@ import "./styles/globals.css";
 import SideNav from "./components/side-nav";
 import { Store } from "tauri-plugin-store-api";
 import getUser, { User } from "../src/lib/getUser";
-import LoadingOverlay from "./components/loader";
+// import LoadingOverlay from "./components/loader";
 import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 import AccountContent from "./components/pages/Account";
+import { Button } from "./components/ui/button";
+import { WebviewWindow } from "@tauri-apps/api/window";
 const osType = await type();
 const store = new Store("token.dat");
 if (osType == "Windows_NT") invoke("set_window_shadow");
@@ -20,18 +22,33 @@ type TokenStorageProps = {
 };
 function App() {
   const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
+  const [windows, setWindows] = useState<any>([]);
+  const createWindow = () => {
+    setWindows((prevState: any) => {
+      console.log(windows)
+      const newWindowMeta = { id: `${Date.now()}` };
+      const webview = new WebviewWindow(newWindowMeta.id, {
+        url: "https://www.youtube.com/watch?v=aonOU1ZHJW8&t=2704s&ab_channel=JacobBolda",
+        center: true,
+        decorations: false
+      });
+      const nextState = prevState.concat([newWindowMeta])
+      return nextState;
+    })
+    
+  }
   useEffect(() => {
     const getToken = async () => {
-      setLoading(true);
+      // setLoading(true);
       const val = (await store.get("authToken")) as TokenStorageProps;
       console.log(val);
       if (val) {
         const u = await getUser(val.value!);
         if (u) {
           setUser(u);
-          setLoading(false);
+          // setLoading(false);
         }
       }
     };
@@ -100,7 +117,7 @@ function App() {
         className="w-full min-h-screen rounded-md"
         onContextMenu={(e) => e.preventDefault()}
       >
-        {loading && <LoadingOverlay />}
+        {/* {loading && <LoadingOverlay />} */}
         {user ? (
           <SideNav user={user} handleIconClick={handleIconClick}>
             <div className="p-3">
@@ -112,7 +129,10 @@ function App() {
             </div>
           </SideNav>
         ) : (
-          <></>
+          <>
+            
+            <Button onClick={()=> {invoke("close_client")}}>Window</Button>
+          </>
         )}
       </div>
     </ThemeProvider>

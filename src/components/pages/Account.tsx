@@ -1,7 +1,8 @@
 import { User } from "../../lib/getUser";
 import { Store } from "tauri-plugin-store-api";
 import { useEffect } from "react";
-
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "../ui/button";
 type props = {
   user: User;
 };
@@ -29,14 +30,18 @@ const AccountContent: React.FC<props> = ({ user }) => {
     console.log(val);
   }
   return (
-    <>
-      <div className="flex flex-col text-white">
-        <h1>{user.username}</h1>
-        <button className="p-2 m-2 bg-red-500 rounded-md w-24" onClick={logout}>
-          Logout
-        </button>
-      </div>
-    </>
+    <AnimatePresence>
+      <motion.div
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: -100, opacity: 0 }}
+      >
+        <div className="flex flex-col">
+          <h1>{user.username}</h1>
+          <Button variant="destructive" className="bg-red-600" onClick={logout}>Logout</Button>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

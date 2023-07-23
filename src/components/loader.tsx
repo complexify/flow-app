@@ -3,10 +3,10 @@ import React from "react";
 const LoadingOverlay: React.FC = () => {
   return (
     <>
-      <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50 rounded-md">
+      <div className="z-10 rounded-md">
         <svg
           aria-hidden="true"
-          className="animate-spin-fast -ml-1 mr-3 h-10 w-10 text-transparent fill-blue-600"
+          className="animate-spin-fast h-10 w-10 text-transparent fill-blue-600"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

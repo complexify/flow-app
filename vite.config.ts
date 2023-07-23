@@ -33,6 +33,7 @@ export default defineConfig(async () => ({
       input: {
         main: resolve(__dirname, "index.html"),
         splashscreen: resolve(__dirname, "src/splash/splashscreen.html"),
+        preload: resolve(__dirname, "src/preload/preload.html"),
       },
     },
   },
