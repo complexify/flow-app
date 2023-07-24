@@ -1,4 +1,4 @@
-import { User } from "../../lib/getUser";
+import { User } from "@/interfaces/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
 
 type props = {

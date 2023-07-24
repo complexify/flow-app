@@ -1,72 +1,73 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TitleBar from "../components/title-bar";
 import { type } from "@tauri-apps/api/os";
-import { invoke } from "@tauri-apps/api";
-// import { open } from "@tauri-apps/api/shell";
-import { listen } from "@tauri-apps/api/event";
-// import axios from "axios";
-// import { Store } from "tauri-plugin-store-api";
+import LoadingOverlay from "@/components/loader";
+import { open } from "@tauri-apps/api/shell";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
+import { login, getUser } from "@/lib/auth";
+import { listen } from "@tauri-apps/api/event";
+import { invoke } from "@tauri-apps/api";
+import { Store } from "tauri-plugin-store-api";
 const osType = await type();
-// const store = new Store("token.dat");
-export type User = {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar?: string;
-  bot?: boolean;
-  system?: boolean;
-  mfa_enabled?: boolean;
-  banner?: string;
-  accent_color?: number;
-  locale?: string;
-  verified?: boolean;
-  email?: string;
-  flags?: number;
-  premium_type?: number;
-  public_flags?: number;
-};
+const store = new Store("token.dat");
 
 const Preload: React.FC = ({}) => {
-  async function process() {
-    invoke("open_client");
+  const [loading, setLoading] = useState(false);
+
+   useEffect(() => {
+     // Function to check and handle the authToken
+     const checkAuthToken = async () => {
+       const val = await store.get("authToken");
+       console.log(val);
+       if (!val) {
+         setLoading(true);
+
+         // Listen for the "scheme-request-received" event
+         const unlistenSchemeRequest = listen(
+           "scheme-request-received",
+           async (event) => {
+             console.log("RECEIVED", event.payload);
+
+             if (Array.isArray(event.payload)) {
+               const authtoken = event.payload.find(
+                 (param) => param.key === "authtoken"
+               )?.value;
+
+               if (authtoken) {
+                 // Save the authToken to local storage and perform the necessary actions
+                 await store.set("authToken", { value: authtoken });
+                 await store.save();
+                 setLoading(false);
+                 invoke("open_client");
+               }
+             }
+           }
+         );
+
+         return () => {
+           // Clean up the event listener when this useEffect is re-executed or the component unmounts
+           unlistenSchemeRequest.then((f) => f());
+         };
+       } else {
+         // If authToken exists in local storage, perform the necessary actions
+         invoke("open_client");
+       }
+     };
+
+     checkAuthToken();
+   }, []);
+  
+  function process() {
+    setLoading(true);
+    open("http://localhost:3000/?authType=app");
   }
 
   useEffect(() => {
-    const unlisten = async () => {
-      await listen("scheme-request-received", async (event) => {
-        console.log("RECEIVED", event.payload);
-
-        if (Array.isArray(event.payload)) {
-          const authtoken = event.payload.find(
-            (param) => param.key === "authtoken"
-          )?.value;
-          console.log(authtoken);
-        }
-      });
-    };
-
-    unlisten();
-    return () => {
-      unlisten();
-    };
-  }, []);
-
-  useEffect(() => {
-    // define a custom handler function
-    // for the contextmenu event
     const handleContextMenu = (e: any) => {
-      // prevent the right-click menu from appearing
       e.preventDefault();
     };
-
-    // attach the event listener to
-    // the document object
     document.addEventListener("contextmenu", handleContextMenu);
-
-    // clean up the event listener when
-    // the component unmounts
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
     };
@@ -110,7 +111,11 @@ const Preload: React.FC = ({}) => {
         className={`flex flex-col min-h-[calc(100vh-80px)] justify-center items-center`}
       >
         <h1 className="text-3xl m-2">Flow</h1>
-        <Button onClick={process}>Open Client</Button>
+        {loading ? (
+          <LoadingOverlay />
+        ) : (
+          <Button onClick={process}>Login</Button>
+        )}
       </div>
     </ThemeProvider>
   );

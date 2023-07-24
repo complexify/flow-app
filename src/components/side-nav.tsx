@@ -3,12 +3,13 @@ import { X, Minus } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { appWindow } from "@tauri-apps/api/window";
-import { User } from "../lib/getUser";
+import { User } from "@/interfaces/interfaces";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WindowIcon from "@mui/icons-material/Window";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
+import { invoke } from "@tauri-apps/api";
 export type props = {
   children?: ReactNode;
   user: User;
@@ -34,10 +35,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
         >
           <div className="flex flex-col items-center justify-between">
             {/* <img src={logo} className="w-10 h-10 mt-2" /> */}
-            <Badge
-              variant="outline"
-               className="mt-2 rounded-md "
-            >
+            <Badge variant="outline" className="mt-2 rounded-md ">
               flow
             </Badge>
             <div className="flex flex-col mt-12">
@@ -127,7 +125,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
             variant="ghost"
             className="h-7 group"
             onClick={() => {
-              appWindow.close();
+              invoke("exit_app");
             }}
           >
             <X className="w-4 h-4  group-hover:text-red-500" />

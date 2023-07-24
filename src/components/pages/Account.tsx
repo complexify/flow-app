@@ -1,34 +1,14 @@
-import { User } from "../../lib/getUser";
-import { Store } from "tauri-plugin-store-api";
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/button";
+import { User } from "@/interfaces/interfaces";
+import { Store } from "tauri-plugin-store-api";
+import { invoke } from "@tauri-apps/api";
 type props = {
   user: User;
 };
-type TokenStorageProps = {
-  value: string;
-};
-
 const store = new Store("token.dat");
-
 const AccountContent: React.FC<props> = ({ user }) => {
-  useEffect(() => {
-    const getToken = async () => {
-      const val = (await store.get("authToken")) as TokenStorageProps;
-      console.log(val);
-    };
-    getToken();
-    return () => {
-      getToken();
-    };
-  }, []);
 
-  async function logout() {
-    await store.delete("authToken");
-    const val = (await store.get("authToken")) as TokenStorageProps;
-    console.log(val);
-  }
   return (
     <AnimatePresence>
       <motion.div
@@ -38,7 +18,7 @@ const AccountContent: React.FC<props> = ({ user }) => {
       >
         <div className="flex flex-col">
           <h1>{user.username}</h1>
-          <Button variant="destructive" className="bg-red-600" onClick={logout}>Logout</Button>
+          <Button variant="destructive" className="bg-red-600" onClick={async () => {await store.delete("authToken"); invoke("close_client")}}>Logout</Button>
         </div>
       </motion.div>
     </AnimatePresence>

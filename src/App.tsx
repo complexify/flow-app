@@ -6,15 +6,17 @@ import DashContent from "./components/pages/Dash";
 import "./styles/globals.css";
 import SideNav from "./components/side-nav";
 import { Store } from "tauri-plugin-store-api";
-import getUser, { User } from "../src/lib/getUser";
+import { getUserStruct } from "./lib/auth";
+import { User } from "./interfaces/interfaces";
 // import LoadingOverlay from "./components/loader";
 import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 import AccountContent from "./components/pages/Account";
 import { Button } from "./components/ui/button";
+
+const store = new Store("token.dat");
 // import { WebviewWindow } from "@tauri-apps/api/window";
 const osType = await type();
-const store = new Store("token.dat");
 if (osType == "Windows_NT") invoke("set_window_shadow");
 
 type TokenStorageProps = {
@@ -24,31 +26,17 @@ function App() {
   const [user, setUser] = useState<User>();
   // const [loading, setLoading] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
-  // const [windows, setWindows] = useState<any>([]);
-  // const createWindow = () => {
-  //   setWindows((prevState: any) => {
-  //     console.log(windows)
-  //     const newWindowMeta = { id: `${Date.now()}` };
-  //     const webview = new WebviewWindow(newWindowMeta.id, {
-  //       url: "https://www.youtube.com/watch?v=aonOU1ZHJW8&t=2704s&ab_channel=JacobBolda",
-  //       center: true,
-  //       decorations: false
-  //     });
-  //     const nextState = prevState.concat([newWindowMeta])
-  //     return nextState;
-  //   })
-    
-  // }
   useEffect(() => {
     const getToken = async () => {
-      // setLoading(true);
-      const val = (await store.get("authToken")) as TokenStorageProps;
-      console.log(val);
-      if (val) {
-        const u = await getUser(val.value!);
-        if (u) {
-          setUser(u);
-          // setLoading(false);
+      let val = null;
+      while (!val) {
+        val = (await store.get("authToken")) as TokenStorageProps;
+        console.log(val);
+        if (val) {
+          const u = await getUserStruct(val.value!);
+          if (u) {
+            setUser(u);
+          }
         }
       }
     };
@@ -129,10 +117,21 @@ function App() {
             </div>
           </SideNav>
         ) : (
-          <>
-            
-            <Button onClick={()=> {invoke("close_client")}}>Window</Button>
-          </>
+          <div
+            className={`flex flex-col min-h-screen justify-center items-center`}
+          >
+            <p className="text-2xl m-2">
+              Please login again, you have been signed out.
+            </p>
+
+            <Button
+              onClick={() => {
+                invoke("close_client");
+              }}
+            >
+              Login
+            </Button>
+          </div>
         )}
       </div>
     </ThemeProvider>

@@ -1,6 +1,4 @@
-import axios from "axios";
-
-export type User = {
+export interface User {
   id: string;
   username: string;
   discriminator: string;
@@ -17,13 +15,3 @@ export type User = {
   premium_type?: number;
   public_flags?: number;
 };
-
-export default async function getUser(token: string): Promise<User> {
-  const response = await axios.get<User>(
-    `https://discord.com/api/v10/users/@me`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-  return response.data;
-}
