@@ -5,8 +5,8 @@ import PanelContent from "./components/pages/Panel";
 import DashContent from "./components/pages/Dash";
 import "./styles/globals.css";
 import SideNav from "./components/side-nav";
-import { Store } from "tauri-plugin-store-api";
-import { getUserStruct } from "./lib/auth";
+// import { Store } from "tauri-plugin-store-api";
+import { getUserStruct, getUser, logout } from "./lib/auth";
 import { User } from "./interfaces/interfaces";
 // import LoadingOverlay from "./components/loader";
 import { type } from "@tauri-apps/api/os";
@@ -14,7 +14,7 @@ import { invoke } from "@tauri-apps/api";
 import AccountContent from "./components/pages/Account";
 import { Button } from "./components/ui/button";
 
-const store = new Store("token.dat");
+// const store = new Store("token.dat");
 // import { WebviewWindow } from "@tauri-apps/api/window";
 const osType = await type();
 if (osType == "Windows_NT") invoke("set_window_shadow");
@@ -30,10 +30,10 @@ function App() {
     const getToken = async () => {
       let val = null;
       while (!val) {
-        val = (await store.get("authToken")) as TokenStorageProps;
+        val = await getUser();
         console.log(val);
         if (val) {
-          const u = await getUserStruct(val.value!);
+          const u = await getUserStruct(val as string);
           if (u) {
             setUser(u);
           }
@@ -41,9 +41,6 @@ function App() {
       }
     };
     getToken();
-    return () => {
-      getToken();
-    };
   }, []);
 
   useEffect(() => {
@@ -126,6 +123,7 @@ function App() {
 
             <Button
               onClick={() => {
+                logout();
                 invoke("close_client");
               }}
             >

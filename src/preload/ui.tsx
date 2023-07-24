@@ -5,57 +5,29 @@ import LoadingOverlay from "@/components/loader";
 import { open } from "@tauri-apps/api/shell";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
-import { login, getUser } from "@/lib/auth";
+import { login } from "@/lib/auth";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api";
-import { Store } from "tauri-plugin-store-api";
+// import { Store } from "tauri-plugin-store-api";
 const osType = await type();
-const store = new Store("token.dat");
+// const store = new Store("token.dat");
 
 const Preload: React.FC = ({}) => {
   const [loading, setLoading] = useState(false);
 
    useEffect(() => {
-     // Function to check and handle the authToken
-     const checkAuthToken = async () => {
-       const val = await store.get("authToken");
-       console.log(val);
-       if (!val) {
-         setLoading(true);
-
-         // Listen for the "scheme-request-received" event
-         const unlistenSchemeRequest = listen(
-           "scheme-request-received",
-           async (event) => {
-             console.log("RECEIVED", event.payload);
-
-             if (Array.isArray(event.payload)) {
-               const authtoken = event.payload.find(
-                 (param) => param.key === "authtoken"
-               )?.value;
-
-               if (authtoken) {
-                 // Save the authToken to local storage and perform the necessary actions
-                 await store.set("authToken", { value: authtoken });
-                 await store.save();
-                 setLoading(false);
-                 invoke("open_client");
-               }
-             }
-           }
-         );
-
-         return () => {
-           // Clean up the event listener when this useEffect is re-executed or the component unmounts
-           unlistenSchemeRequest.then((f) => f());
-         };
-       } else {
-         // If authToken exists in local storage, perform the necessary actions
-         invoke("open_client");
-       }
-     };
-
-     checkAuthToken();
+     const authMount = async () => {
+      listen('scheme-request', async ({ payload }) => {
+        let accessToken = (payload as string).split('=')[1];
+        if (accessToken) {
+          accessToken = accessToken.replace('/', '');
+          await login(accessToken);
+          // await store.save();
+          invoke("open_client")
+        }
+      })
+     }
+     authMount();
    }, []);
   
   function process() {

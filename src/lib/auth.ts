@@ -10,12 +10,10 @@ export async function login(authToken: string) {
     expires: COOKIE_EXPIRATION_DAYS,
     secure: true,
   });
-  return true;
 }
 
 export function logout() {
   Cookies.remove(COOKIE_NAME);
-  return true;
 }
 
 export async function getUser() {
@@ -23,6 +21,7 @@ export async function getUser() {
 }
 
 export async function getUserStruct(token: string): Promise<User> {
+  console.log(token)
   const response = await axios.get<User>(
     `https://discord.com/api/v10/users/@me`,
     {

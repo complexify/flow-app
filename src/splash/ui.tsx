@@ -9,6 +9,7 @@ import LoadingOverlay from "@/components/loader";
 // import { Store } from "tauri-plugin-store-api";
 import { ThemeProvider } from "@/components/theme-provider";
 // import { Button } from "@/components/ui/button";
+import { getUser } from "@/lib/auth";
 const osType = await type();
 // const store = new Store("token.dat");
 export type User = {
@@ -82,8 +83,10 @@ const Splash: React.FC = ({}) => {
   }
   useEffect(() => {
     // Function to be executed after 5 seconds
-    const executeAfterFiveSeconds = () => {
-      invoke("close_splashscreen");
+    const executeAfterFiveSeconds = async () => {
+      let token = await getUser();
+      console.log(token);
+      invoke("close_splashscreen", { screen: token ? "main" : "preload"});
       // Replace the above console.log with your desired command
     };
 
