@@ -10,6 +10,7 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { invoke } from "@tauri-apps/api";
+
 export type props = {
   children?: ReactNode;
   user: User;
@@ -19,6 +20,7 @@ export type props = {
 const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
   const nameInitial = user.username?.charAt(0).toUpperCase() || "";
   const [activeIcon, setActiveIcon] = useState<string | null>(null);
+  
 
   const handleClick = (iconName: string) => {
     setActiveIcon(iconName);
@@ -28,7 +30,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
   return (
     <div className="flex min-h-screen w-full">
       <div
-        className={`fixed h-screen flex flex-col w-16 z-[61] rounded-l-md bg-slate-100 dark:bg-slate-900/40`}
+        className={`fixed h-screen flex flex-col w-16 z-[61] bg-slate-100 dark:bg-slate-900/40`}
       >
         <div
           className={`flex-col origin-center duration-300 h-full border-r  p-2 text-center items-center justify-between flex`}
@@ -132,7 +134,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
           </Button>
         </div>
 
-        <div className="left-16 p-2 mt-10 overflow-y-auto overflow-x-hidden fixed top-0 bottom-0 right-0">
+        <div className="left-16 p-2 mt-8 overflow-y-auto overflow-x-hidden fixed top-0 bottom-0 right-0">
           {children}
         </div>
       </main>
