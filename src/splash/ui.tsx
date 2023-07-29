@@ -102,9 +102,9 @@ const Splash: React.FC = ({}) => {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       {/* <TitleBar /> */}
       {/*  min-h-[calc(100vh-80px)] */}
-      <div className={`flex flex-col min-h-screen justify-center items-center`}>
-        <h1 className="text-3xl m-2">Flow</h1>
-        <LoadingOverlay />
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <h1 className="text-3xl m-2">Flow</h1>
+          <LoadingOverlay />
       </div>
     </ThemeProvider>
   );

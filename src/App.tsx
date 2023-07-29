@@ -19,13 +19,10 @@ import { Button } from "./components/ui/button";
 const osType = await type();
 if (osType == "Windows_NT") invoke("set_window_shadow");
 
-type TokenStorageProps = {
-  value: string;
-};
 function App() {
   const [user, setUser] = useState<User>();
   // const [loading, setLoading] = useState(false);
-  const [selectedIcon, setSelectedIcon] = useState(null);
+  const [selectedIcon, setSelectedIcon] = useState("dash");
   useEffect(() => {
     const getToken = async () => {
       let val = null;

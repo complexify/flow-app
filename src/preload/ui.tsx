@@ -15,24 +15,24 @@ const osType = await type();
 const Preload: React.FC = ({}) => {
   const [loading, setLoading] = useState(false);
 
-   useEffect(() => {
-     const authMount = async () => {
-      listen('scheme-request', async ({ payload }) => {
-        let accessToken = (payload as string).split('=')[1];
+  useEffect(() => {
+    const authMount = async () => {
+      listen("scheme-request", async ({ payload }) => {
+        let accessToken = (payload as string).split("=")[1];
         if (accessToken) {
-          accessToken = accessToken.replace('/', '');
+          accessToken = accessToken.replace("/", "");
           await login(accessToken);
           // await store.save();
-          invoke("open_client")
+          invoke("open_client");
         }
-      })
-     }
-     authMount();
-   }, []);
-  
+      });
+    };
+    authMount();
+  }, []);
+
   function process() {
     setLoading(true);
-    open("http://localhost:3000/?authType=app");
+    open("https://next-js-auth-complexify.vercel.app/?authType=app");
   }
 
   useEffect(() => {
@@ -79,15 +79,17 @@ const Preload: React.FC = ({}) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TitleBar />
-      <div
-        className={`flex flex-col min-h-[calc(100vh-80px)] justify-center items-center`}
-      >
-        <h1 className="text-3xl m-2">Flow</h1>
-        {loading ? (
-          <LoadingOverlay />
-        ) : (
-          <Button onClick={process}>Login</Button>
-        )}
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div
+          className={`flex flex-col min-h-[calc(100vh-80px)] justify-center items-center `}
+        >
+          <h1 className="text-3xl m-2">Flow</h1>
+          {loading ? (
+            <LoadingOverlay />
+          ) : (
+            <Button onClick={process}>Login</Button>
+          )}
+        </div>
       </div>
     </ThemeProvider>
   );

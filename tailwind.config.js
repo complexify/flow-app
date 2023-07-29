@@ -1,4 +1,6 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const plugin = require("tailwindcss/plugin");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -76,9 +78,12 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "spin-slow": "spin 2s linear infinite",
         "spin-fast": "spin 0.5s linear infinite",
-        "wiggle": "wiggle 1s ease-in-out infinite",
+        wiggle: "wiggle 1s ease-in-out infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwind-scrollbar")({ nocompatible: true }),
+    require("tailwindcss-animate"),
+  ],
 };

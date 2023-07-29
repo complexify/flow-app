@@ -7,10 +7,10 @@ import { Toaster } from "./components/ui/toaster";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     {/* <AnimatePresence > */}
-      <div className="rounded-md">
-        <App />
-        <Toaster />
-      </div>
+    <div className="">
+      <App />
+      <Toaster />
+    </div>
     {/* </AnimatePresence> */}
   </React.StrictMode>
 );

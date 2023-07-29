@@ -85,3 +85,13 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: red;
+    border-right: 8px white solid;
+    background-clip: padding-box;
+  }

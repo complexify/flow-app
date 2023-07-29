@@ -26,9 +26,9 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full">
       <div
-        className={`min-h-screen flex flex-col w-16 z-[61] rounded-l-md bg-slate-100 dark:bg-slate-900/40`}
+        className={`fixed h-screen flex flex-col w-16 z-[61] rounded-l-md bg-slate-100 dark:bg-slate-900/40`}
       >
         <div
           className={`flex-col origin-center duration-300 h-full border-r  p-2 text-center items-center justify-between flex`}
@@ -109,7 +109,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
       >
         <div
           data-tauri-drag-region
-          className={` flex items-center justify-end p-2 sticky top-0 z-[60]`}
+          className={`fixed flex items-center justify-end p-2 z-[60] right-0 w-full bg-background`}
         >
           <Button
             variant="ghost"
@@ -128,11 +128,13 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
               invoke("exit_app");
             }}
           >
-            <X className="w-4 h-4  group-hover:text-red-500" />
+            <X className="w-4 h-4 group-hover:text-red-500" />
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-2">{children}</div>
+        <div className="left-16 p-2 mt-10 overflow-y-auto overflow-x-hidden fixed top-0 bottom-0 right-0">
+          {children}
+        </div>
       </main>
     </div>
   );
