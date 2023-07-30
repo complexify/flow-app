@@ -3,10 +3,15 @@ import axios from "axios";
 import { User } from "@/interfaces/interfaces";
 // import { invoke } from "@tauri-apps/api";
 const COOKIE_NAME = "authToken";
+const USER_ID = "userId";
 const COOKIE_EXPIRATION_DAYS = 30;
 
-export async function login(authToken: string) {
+export async function login(authToken: string, userId: string) {
   Cookies.set(COOKIE_NAME, authToken, {
+    expires: COOKIE_EXPIRATION_DAYS,
+    secure: true,
+  });
+  Cookies.set(USER_ID, userId, {
     expires: COOKIE_EXPIRATION_DAYS,
     secure: true,
   });
@@ -14,6 +19,7 @@ export async function login(authToken: string) {
 
 export function logout() {
   Cookies.remove(COOKIE_NAME);
+  Cookies.remove(USER_ID);
 }
 
 export async function getUser() {

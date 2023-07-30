@@ -18,10 +18,16 @@ const Preload: React.FC = ({}) => {
   useEffect(() => {
     const authMount = async () => {
       listen("scheme-request", async ({ payload }) => {
-        let accessToken = (payload as string).split("=")[1];
+        // let accessToken = (payload as string).split("=")[1];
+        let accessToken = (payload as string)
+          .split("access_token=")[1]
+          .split("&")[0];
+
+        // Extracting the user_id
+        let userId = (payload as string).split("user_id=")[1];
         if (accessToken) {
           accessToken = accessToken.replace("/", "");
-          await login(accessToken);
+          await login(accessToken, userId);
           // await store.save();
           invoke("open_client");
         }
