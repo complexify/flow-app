@@ -17,3 +17,13 @@ export interface User {
   public_flags?: number | null;
   avatar_decoration?: string | null;
 }
+
+export interface Expense {
+  id: string;
+  name: string;
+  e_type: string;
+  amount: number;
+  description?: string;
+  created_at: Date;
+  updated_at: Date;
+}

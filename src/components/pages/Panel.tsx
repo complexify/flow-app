@@ -1,15 +1,40 @@
-import { User } from "@/interfaces/interfaces";
+import { User, Expense } from "@/interfaces/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LayoutGrid, AlignJustify } from "lucide-react";
 import { Button } from "../ui/button";
+import { invoke } from "@tauri-apps/api";
+import { getUserId } from "@/lib/auth";
+import ExpenseCard from "../expense";
+import LoadingOverlay from "../loader";
 type props = {
   user: User;
 };
 
-const PanelContent: React.FC<props> = ({}) => {
+const PanelContent: React.FC<props> = ({user}) => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [grid, setGrid] = useState<boolean>(true);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const token = getUserId();
+
+  useEffect(() => {
+    const getExpenses = async () => {
+      try {
+        const expenses: Expense[] = await invoke("get_user_expenses", {
+          url: "https://next-js-auth-complexify.vercel.app/api/users/getExpenses",
+          token,
+        });
+        setExpenses(expenses);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+        setLoading(false);
+      }
+    };
+    getExpenses();
+  }, [user]);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -48,68 +73,23 @@ const PanelContent: React.FC<props> = ({}) => {
             </div>
           </div>
           <div className="space-y-4 rounded-md w-full">
-            <div
-              className={`grid ${grid ? "grid-cols-4" : "grid-rows-4"} gap-4`}
-            >
+            {loading ? (
               <div
-                className={`rounded-lg border-l-4 border-blue-500 ${
-                  grid ? "h-32" : "h-12"
-                } bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                  grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                } duration-150`}
-              ></div>
+                className={`flex flex-col min-h-[calc(100vh-300px)] justify-center items-center`}
+              >
+                <LoadingOverlay />
+              </div>
+            ) : expenses.length === 0 ? (
+              <h1>No Expenses</h1>
+            ) : (
               <div
-                className={`rounded-lg border-l-4 border-red-500  ${
-                  grid ? "h-32" : "h-12"
-                }
-                 bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                   grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                 } duration-150`}
-              ></div>
-              <div
-                className={`rounded-lg border-l-4 border-blue-500  ${
-                  grid ? "h-32" : "h-12"
-                } bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                  grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                } duration-150`}
-              ></div>
-              <div
-                className={`rounded-lg border-l-4 border-red-500 ${
-                  grid ? "h-32" : "h-12"
-                } bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                  grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                } duration-150`}
-              ></div>
-              <div
-                className={`rounded-lg border-l-4 border-blue-500 ${
-                  grid ? "h-32" : "h-12"
-                } bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                  grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                } duration-150`}
-              ></div>
-              <div
-                className={`rounded-lg border-l-4 border-red-500  ${
-                  grid ? "h-32" : "h-12"
-                }
-                 bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                   grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                 } duration-150`}
-              ></div>
-              <div
-                className={`rounded-lg border-l-4 border-blue-500  ${
-                  grid ? "h-32" : "h-12"
-                } bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                  grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                } duration-150`}
-              ></div>
-              <div
-                className={`rounded-lg border-l-4 border-red-500 ${
-                  grid ? "h-32" : "h-12"
-                } bg-slate-50 dark:bg-slate-900/40 shadow-md ${
-                  grid ? "hover:scale-[1.09]" : "hover:scale-[1.03]"
-                } duration-150`}
-              ></div>
-            </div>
+                className={`grid ${grid ? "grid-cols-4" : "grid-rows-4"} gap-4`}
+              >
+                {expenses.map((expense, index) => (
+                  <ExpenseCard expense={expense} state={grid} key={index} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </motion.div>

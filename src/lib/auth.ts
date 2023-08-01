@@ -25,6 +25,11 @@ export function getUser() {
   return Cookies.get(COOKIE_NAME);
 }
 
+export function getUserId() {
+  return Cookies.get(USER_ID);
+}
+
+
 export async function getUserStruct(token: string): Promise<User> {
   const response: User = await invoke("get_user", { token });
   return response;

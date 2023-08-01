@@ -22,7 +22,7 @@ window-shadows = "0.2.1"
 settimeout = "0.1.2"
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 reqwest = { version = "0.11", features = ["json", "blocking"] }
-
+chrono = { version = "0.4", features = ["serde"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
