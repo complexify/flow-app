@@ -5,32 +5,26 @@ import PanelContent from "./components/pages/Panel";
 import DashContent from "./components/pages/Dash";
 import "./styles/globals.css";
 import SideNav from "./components/side-nav";
-// import { Store } from "tauri-plugin-store-api";
 import { getUserStruct, getUser, logout } from "./lib/auth";
 import { User } from "./interfaces/interfaces";
-// import LoadingOverlay from "./components/loader";
 import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 import AccountContent from "./components/pages/Account";
 import { Button } from "./components/ui/button";
-
-// const store = new Store("token.dat");
-// import { WebviewWindow } from "@tauri-apps/api/window";
 const osType = await type();
 if (osType == "Windows_NT") invoke("set_window_shadow");
 
 function App() {
   const [user, setUser] = useState<User>();
-  // const [loading, setLoading] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState("dash");
   useEffect(() => {
     const getToken = async () => {
       let val = null;
       while (!val) {
-        val = await getUser();
+        val = getUser();
         console.log(val);
         if (val) {
-          const u = await getUserStruct(val as string);
+          const u = await getUserStruct(val);
           if (u) {
             setUser(u);
           }
@@ -41,19 +35,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // define a custom handler function
-    // for the contextmenu event
     const handleContextMenu = (e: any) => {
-      // prevent the right-click menu from appearing
       e.preventDefault();
     };
 
-    // attach the event listener to
-    // the document object
     document.addEventListener("contextmenu", handleContextMenu);
-
-    // clean up the event listener when
-    // the component unmounts
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
     };
@@ -103,7 +89,6 @@ function App() {
         {user ? (
           <SideNav user={user} handleIconClick={handleIconClick}>
             <div className="p-3">
-              {/* <App user={user} /> */}
               {selectedIcon === "dash" && <DashContent user={user} />}
               {selectedIcon === "panel" && <PanelContent user={user} />}
               {selectedIcon === "settings" && <SettingsContent />}

@@ -2,7 +2,10 @@
 
 mod utils;
 mod commands;
-
+mod discord;
+mod api;
+mod error;
+mod models;
 fn main() {
     tauri_plugin_deep_link::prepare("com.complexsolutions.flow");
 
@@ -23,7 +26,8 @@ fn main() {
             commands::open_client,
             commands::set_window_shadow,
             commands::close_client,
-            commands::exit_app
+            commands::exit_app,
+            discord::get_user
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

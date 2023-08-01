@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
-import axios from "axios";
+import { invoke } from "@tauri-apps/api";
 import { User } from "@/interfaces/interfaces";
-// import { invoke } from "@tauri-apps/api";
 const COOKIE_NAME = "authToken";
 const USER_ID = "userId";
 const COOKIE_EXPIRATION_DAYS = 30;
@@ -22,17 +21,11 @@ export function logout() {
   Cookies.remove(USER_ID);
 }
 
-export async function getUser() {
+export function getUser() {
   return Cookies.get(COOKIE_NAME);
 }
 
 export async function getUserStruct(token: string): Promise<User> {
-  console.log(token)
-  const response = await axios.get<User>(
-    `https://discord.com/api/v10/users/@me`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-  return response.data;
+  const response: User = await invoke("get_user", { token });
+  return response;
 }

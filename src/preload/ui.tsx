@@ -8,9 +8,7 @@ import { Button } from "@/components/ui/button";
 import { login } from "@/lib/auth";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api";
-// import { Store } from "tauri-plugin-store-api";
 const osType = await type();
-// const store = new Store("token.dat");
 
 const Preload: React.FC = ({}) => {
   const [loading, setLoading] = useState(false);
@@ -18,17 +16,16 @@ const Preload: React.FC = ({}) => {
   useEffect(() => {
     const authMount = async () => {
       listen("scheme-request", async ({ payload }) => {
-        // let accessToken = (payload as string).split("=")[1];
         let accessToken = (payload as string)
           .split("access_token=")[1]
           .split("&")[0];
 
-        // Extracting the user_id
+        console.log(payload);
         let userId = (payload as string).split("user_id=")[1];
         if (accessToken) {
           accessToken = accessToken.replace("/", "");
+          userId = userId.replace("/", "");
           await login(accessToken, userId);
-          // await store.save();
           invoke("open_client");
         }
       });

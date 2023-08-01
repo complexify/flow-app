@@ -10,6 +10,7 @@ type props = {
 // const store = new Store("token.dat");
 const AccountContent: React.FC<props> = ({ user }) => {
 
+
   return (
     <AnimatePresence>
       <motion.div
@@ -19,7 +20,17 @@ const AccountContent: React.FC<props> = ({ user }) => {
       >
         <div className="flex flex-col">
           <h1>{user.username}</h1>
-          <Button variant="destructive" className="bg-red-600" onClick={() => {logout(); invoke("close_client")}}>Logout</Button>
+        
+          <Button
+            variant="destructive"
+            className="bg-red-600"
+            onClick={() => {
+              logout();
+              invoke("close_client");
+            }}
+          >
+            Logout
+          </Button>
         </div>
       </motion.div>
     </AnimatePresence>

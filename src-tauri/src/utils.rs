@@ -1,4 +1,3 @@
-use serde_json::json;
 use tauri::Manager;
 
 pub fn register_deeplink(handle: tauri::AppHandle) {

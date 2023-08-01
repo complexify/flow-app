@@ -1,17 +1,12 @@
 import React, { useEffect } from "react";
-// import TitleBar from "../components/title-bar";
 import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
-// import { open } from "@tauri-apps/api/shell";
-// import { listen } from "@tauri-apps/api/event";
 import LoadingOverlay from "@/components/loader";
-// import axios from "axios";
-// import { Store } from "tauri-plugin-store-api";
 import { ThemeProvider } from "@/components/theme-provider";
-// import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth";
+
 const osType = await type();
-// const store = new Store("token.dat");
+
 export type User = {
   id: string;
   username: string;
@@ -33,19 +28,11 @@ export type User = {
 const Splash: React.FC = ({}) => {
 
   useEffect(() => {
-    // define a custom handler function
-    // for the contextmenu event
     const handleContextMenu = (e: any) => {
-      // prevent the right-click menu from appearing
       e.preventDefault();
     };
-
-    // attach the event listener to
-    // the document object
     document.addEventListener("contextmenu", handleContextMenu);
 
-    // clean up the event listener when
-    // the component unmounts
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
     };
@@ -82,18 +69,14 @@ const Splash: React.FC = ({}) => {
     disable_web_functions();
   }
   useEffect(() => {
-    // Function to be executed after 5 seconds
     const executeAfterFiveSeconds = async () => {
       let token = await getUser();
       console.log(token);
       invoke("close_splashscreen", { screen: token ? "main" : "preload"});
-      // Replace the above console.log with your desired command
     };
 
-    // Set up the timer using setTimeout
     const timer = setTimeout(executeAfterFiveSeconds, 2000);
 
-    // Clear the timer if the component unmounts or if the dependencies change
     return () => clearTimeout(timer);
   }, []);
 
