@@ -1,12 +1,15 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod utils;
-mod commands;
-mod discord;
 mod api;
+mod commands;
+mod content;
+mod datetime;
+mod discord;
 mod error;
 mod models;
-mod content;
+mod process;
+mod utils;
+
 fn main() {
     tauri_plugin_deep_link::prepare("com.complexsolutions.flow");
 
@@ -15,12 +18,13 @@ fn main() {
             let handle = app.handle();
             utils::register_deeplink(handle);
             Ok(())
-        }).on_window_event(|event| match event.event() {
+        })
+        .on_window_event(|event| match event.event() {
             tauri::WindowEvent::CloseRequested { api, .. } => {
                 std::process::exit(0x0);
             }
             _ => {}
-    })  
+        })
         .plugin(tauri_plugin_store::Builder::default().build())
         .invoke_handler(tauri::generate_handler![
             commands::close_splashscreen,

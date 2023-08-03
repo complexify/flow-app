@@ -2,7 +2,7 @@
   "tauri": {
     "windows": [
       {
-        "title": "flow Loader",
+        "title": "flow loader",
         "width": 400,
         "height": 500,
         "decorations": false,

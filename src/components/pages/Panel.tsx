@@ -12,27 +12,45 @@ type props = {
   user: User;
 };
 
-const PanelContent: React.FC<props> = ({user}) => {
+const PanelContent: React.FC<props> = ({ user }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [grid, setGrid] = useState<boolean>(true);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const token = getUserId();
 
   useEffect(() => {
+    let isMounted = true;
+
     const getExpenses = async () => {
       try {
         const expenses: Expense[] = await invoke("get_user_expenses", {
           url: "https://next-js-auth-complexify.vercel.app/api/users/getExpenses",
           token,
         });
-        setExpenses(expenses);
-        setLoading(false);
+
+        if (isMounted) {
+          setExpenses(expenses);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching expenses:", error);
-        setLoading(false);
+
+        if (isMounted) {
+          setLoading(false);
+          // Optionally, show an error message to the user or handle the error gracefully.
+        }
       }
     };
-    getExpenses();
+
+    if (user) {
+      // Call the API only if the user is available.
+      getExpenses();
+    }
+
+    return () => {
+      // Cleanup function to prevent setting state on unmounted component.
+      isMounted = false;
+    };
   }, [user]);
 
   return (

@@ -20,22 +20,35 @@ fn construct_headers(token: Option<&str>) -> HeaderMap {
     headers
 }
 
-pub fn make_get_request(url: URL, token: Option<&str>) -> APIResult<String> {
+pub async fn make_get_request(url: URL, token: Option<&str>) -> APIResult<String> {
     let url = url.value();
-    let client = reqwest::blocking::Client::new();
-    let response = client.get(url).headers(construct_headers(token)).send()?;
-    let response_body = response.text()?;
+    let client = reqwest::Client::new();
+    let response = client.get(url).headers(construct_headers(token)).send().await?;
+    let response_body = response.text().await?;
     Ok(response_body)
 }
 
-pub fn make_post_request<T: Serialize>(url: URL, token: Option<&str>, data: T)
+pub async fn make_post_request<T: Serialize>(url: URL, token: Option<&str>, data: T)
                                        -> APIResult<String> {
     let url = url.value();
-    let client = reqwest::blocking::Client::new();
+    let client = reqwest::Client::new();
     let response = client.post(url)
         .json(&data)
         .headers(construct_headers(token))
-        .send()?;
-    let response_body = response.text()?;
+        .send().await?;
+    let response_body = response.text().await?;
+    Ok(response_body)
+}
+
+
+pub async fn make_put_request<T: Serialize>(url: URL, token: Option<&str>, data: T)
+                                       -> APIResult<String> {
+    let url = url.value();
+    let client = reqwest::Client::new();
+    let response = client.put(url)
+        .json(&data)
+        .headers(construct_headers(token))
+        .send().await?;
+    let response_body = response.text().await?;
     Ok(response_body)
 }

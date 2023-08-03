@@ -1,8 +1,8 @@
-
 use settimeout::set_timeout;
 use std::time::Duration;
-use tauri::Manager;
 use window_shadows::set_shadow;
+use crate::process::force_exit_app;
+use tauri::Manager;
 
 #[tauri::command]
 pub async fn close_splashscreen(window: tauri::Window, screen: String) {
@@ -42,5 +42,5 @@ pub async fn close_client(window: tauri::Window) {
 
 #[tauri::command]
 pub async fn exit_app() {
-  std::process::exit(0x0);
+  force_exit_app().await;
 }

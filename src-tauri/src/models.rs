@@ -1,8 +1,7 @@
-
-
 use crate::error::TauriError;
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize, Serializer, Deserializer};
+use serde::{Deserialize, Serialize};
+use crate::datetime::{serialize_optional_datetime_utc, deserialize_optional_datetime_utc};
 pub type APIResult<T, E = TauriError> = Result<T, E>;
 
 #[derive(Deserialize, Serialize)]
@@ -26,23 +25,6 @@ pub struct User {
     avatar_decoration: Option<String>,
 }
 
-fn serialize_optional_datetime_utc<S>(datetime: &Option<DateTime<Utc>>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    match datetime {
-        Some(dt) => serializer.serialize_some(dt),
-        None => serializer.serialize_none(),
-    }
-}
-
-fn deserialize_optional_datetime_utc<'de, D>(deserializer: D) -> Result<Option<DateTime<Utc>>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    Option::<DateTime<Utc>>::deserialize(deserializer)
-}
-
 #[derive(Deserialize, Serialize)]
 pub struct Expense {
     id: String,
@@ -54,9 +36,6 @@ pub struct Expense {
     created_at: Option<DateTime<Utc>>,
     #[serde(serialize_with = "serialize_optional_datetime_utc", deserialize_with = "deserialize_optional_datetime_utc")]
     updated_at: Option<DateTime<Utc>>,
-    // created_at: String,
-    // updated_at: String
-
 }
 
 pub enum URL {

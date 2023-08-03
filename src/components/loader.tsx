@@ -3,7 +3,7 @@ import React from "react";
 const LoadingOverlay: React.FC = () => {
   return (
     <>
-      <div className="z-10 rounded-md">
+      <div className="rounded-md">
         <svg
           aria-hidden="true"
           className="animate-spin-fast h-10 w-10 text-transparent fill-blue-600"
