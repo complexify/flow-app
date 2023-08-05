@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { X, Minus } from "lucide-react";
 import { Button } from "./ui/button";
-import { useState } from "react";
 import { appWindow } from "@tauri-apps/api/window";
 import { User } from "@/interfaces/interfaces";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -15,15 +14,17 @@ export type props = {
   children?: ReactNode;
   user: User;
   handleIconClick: (iconName: string) => void;
+  selectedIcon: string;
 };
 
-const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
+const SideNav: React.FC<props> = ({
+  children,
+  user,
+  handleIconClick,
+  selectedIcon,
+}) => {
   const nameInitial = user.username?.charAt(0).toUpperCase() || "";
-  const [activeIcon, setActiveIcon] = useState<string | null>(null);
-  
-
   const handleClick = (iconName: string) => {
-    setActiveIcon(iconName);
     handleIconClick(iconName);
   };
 
@@ -44,7 +45,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
               <Button
                 variant="ghost"
                 className={`p-2 rounded-md my-2 ${
-                  activeIcon === "dash"
+                  selectedIcon === "dash"
                     ? "bg-primary dark:bg-accent text-white "
                     : ""
                 }`}
@@ -56,7 +57,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
               <Button
                 variant="ghost"
                 className={` p-2 rounded-md my-2 ${
-                  activeIcon === "panel"
+                  selectedIcon === "panel"
                     ? "bg-primary dark:bg-accent text-white "
                     : ""
                 }`}
@@ -68,7 +69,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
               <Button
                 variant="ghost"
                 className={`p-2 rounded-md my-2 ${
-                  activeIcon === "settings"
+                  selectedIcon === "settings"
                     ? "bg-primary dark:bg-accent text-white "
                     : ""
                 }`}
@@ -81,7 +82,7 @@ const SideNav: React.FC<props> = ({ children, user, handleIconClick }) => {
 
           <div
             className={`p-1 rounded-full ${
-              activeIcon === "account" ? "bg-primary dark:bg-accent" : ""
+              selectedIcon === "account" ? "bg-primary dark:bg-accent" : ""
             }`}
           >
             <Avatar onClick={() => handleClick("account")}>

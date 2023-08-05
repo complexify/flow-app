@@ -32,6 +32,7 @@ type SettingsFormValues = z.infer<typeof settingsFormSchema>;
 // This can come from your database or API.
 const defaultValues: Partial<SettingsFormValues> = {
   experimental_features: false,
+  
 };
 
 const SettingsContent: React.FC = ({}) => {
@@ -150,4 +151,5 @@ const SettingsContent: React.FC = ({}) => {
     </AnimatePresence>
   );
 };
+
 export default SettingsContent;

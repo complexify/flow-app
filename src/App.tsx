@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ThemeProvider } from "./components/theme-provider";
 import SettingsContent from "./components/pages/Settings";
 import PanelContent from "./components/pages/Panel";
@@ -11,10 +11,12 @@ import { type } from "@tauri-apps/api/os";
 import { invoke } from "@tauri-apps/api";
 import AccountContent from "./components/pages/Account";
 import { Button } from "./components/ui/button";
+import LoadingOverlay from "./components/loader";
 const osType = await type();
 if (osType == "Windows_NT") invoke("set_window_shadow");
 
 function App() {
+  const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User>();
   const [selectedIcon, setSelectedIcon] = useState("dash");
   useEffect(() => {
@@ -27,6 +29,7 @@ function App() {
           const u = await getUserStruct(val);
           if (u) {
             setUser(u);
+            setLoading(false);
           }
         }
       }
@@ -86,13 +89,25 @@ function App() {
         onContextMenu={(e) => e.preventDefault()}
       >
         {/* {loading && <LoadingOverlay />} */}
-        {user ? (
-          <SideNav user={user} handleIconClick={handleIconClick}>
+        {loading ? (
+          <LoadingOverlay />
+        ) : user ? (
+          <SideNav
+            user={user}
+            handleIconClick={handleIconClick}
+            selectedIcon={selectedIcon}
+          >
             <div className="p-3">
               {selectedIcon === "dash" && <DashContent user={user} />}
               {selectedIcon === "panel" && <PanelContent user={user} />}
               {selectedIcon === "settings" && <SettingsContent />}
-              {selectedIcon === "account" && <AccountContent user={user} />}
+              {selectedIcon === "account" && (
+                <AccountContent
+                  user={user}
+                  setSelectedIcon={setSelectedIcon}
+                  handleIconClick={handleIconClick}
+                />
+              )}
             </div>
           </SideNav>
         ) : (

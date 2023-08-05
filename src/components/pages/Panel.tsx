@@ -8,6 +8,7 @@ import { invoke } from "@tauri-apps/api";
 import { getUserId } from "@/lib/auth";
 import ExpenseCard from "../expense";
 import LoadingOverlay from "../loader";
+
 type props = {
   user: User;
 };
@@ -51,7 +52,7 @@ const PanelContent: React.FC<props> = ({ user }) => {
       // Cleanup function to prevent setting state on unmounted component.
       isMounted = false;
     };
-  }, [user]);
+  }, []);
 
   return (
     <AnimatePresence>

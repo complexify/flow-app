@@ -24,8 +24,9 @@ const Preload: React.FC = ({}) => {
         let userId = (payload as string).split("user_id=")[1];
         if (accessToken) {
           accessToken = accessToken.replace("/", "");
-          userId = userId.replace("/", "");
+          userId = userId.replace("/", ""); 
           await login(accessToken, userId);
+          setLoading(false);
           invoke("open_client");
         }
       });

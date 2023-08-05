@@ -1,11 +1,12 @@
 import { User } from "@/interfaces/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
 
 type props = {
   user: User;
 };
 
-const DashContent: React.FC<props> = ({}) => {
+const DashContent: React.FC<props> = () => {
   return (
     <AnimatePresence>
       <motion.div
