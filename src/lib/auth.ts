@@ -32,5 +32,9 @@ export function getUserId() {
 
 export async function getUserStruct(token: string): Promise<User> {
   const response: User = await invoke("get_user", { token });
+  if (!response) {
+    logout();
+    invoke("close_client");
+  }
   return response;
 }

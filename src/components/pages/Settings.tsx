@@ -118,7 +118,7 @@ const SettingsContent: React.FC = ({}) => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="experimental_features"
                   render={({ field }) => (
@@ -141,10 +141,10 @@ const SettingsContent: React.FC = ({}) => {
                       </FormControl>
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </div>
-            <Button type="submit">Save</Button>
+            {/* <Button type="submit">Save</Button> */}
           </form>
         </Form>
       </motion.div>

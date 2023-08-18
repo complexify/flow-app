@@ -88,6 +88,7 @@ const SideNav: React.FC<props> = ({
             <Avatar onClick={() => handleClick("account")}>
               <AvatarImage
                 src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+                draggable={false}
               />
               <AvatarFallback>{nameInitial}</AvatarFallback>
             </Avatar>

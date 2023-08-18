@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { ThemeProvider } from "./components/theme-provider";
 import SettingsContent from "./components/pages/Settings";
 import PanelContent from "./components/pages/Panel";
@@ -14,11 +14,15 @@ import { Button } from "./components/ui/button";
 import LoadingOverlay from "./components/loader";
 const osType = await type();
 if (osType == "Windows_NT") invoke("set_window_shadow");
+type props = {
 
-function App() {
+};
+
+const App: React.FC<props> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User>();
   const [selectedIcon, setSelectedIcon] = useState("dash");
+
   useEffect(() => {
     const getToken = async () => {
       let val = null;
@@ -35,7 +39,10 @@ function App() {
       }
     };
     getToken();
-  }, []);
+    return () => {
+      
+    };
+  }, [user]);
 
   useEffect(() => {
     const handleContextMenu = (e: any) => {
@@ -82,11 +89,13 @@ function App() {
   const handleIconClick = (iconName: any) => {
     setSelectedIcon(iconName);
   };
+
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <div
         className="w-full min-h-screen rounded-md"
         onContextMenu={(e) => e.preventDefault()}
+        style={{ userSelect: "none" }}
       >
         {/* {loading && <LoadingOverlay />} */}
         {loading ? (
@@ -131,6 +140,6 @@ function App() {
       </div>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

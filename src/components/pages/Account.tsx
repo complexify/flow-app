@@ -11,7 +11,11 @@ type props = {
   handleIconClick: (icon: string) => void;
 };
 
-const AccountContent: React.FC<props> = ({ user, setSelectedIcon, handleIconClick }) => {
+const AccountContent: React.FC<props> = ({
+  user,
+  setSelectedIcon,
+  handleIconClick
+}) => {
   return (
     <AnimatePresence>
       <motion.div

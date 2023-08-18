@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LayoutGrid, AlignJustify } from "lucide-react";
-import { Button } from "../ui/button";
+import CreateExpense from "../create";
 import { invoke } from "@tauri-apps/api";
 import { getUserId } from "@/lib/auth";
 import ExpenseCard from "../expense";
 import LoadingOverlay from "../loader";
+
 
 type props = {
   user: User;
@@ -32,6 +33,7 @@ const PanelContent: React.FC<props> = ({ user }) => {
         if (isMounted) {
           setExpenses(expenses);
           setLoading(false);
+          console.log(expenses)
         }
       } catch (error) {
         console.error("Error fetching expenses:", error);
@@ -62,7 +64,7 @@ const PanelContent: React.FC<props> = ({ user }) => {
         exit={{ x: -100, opacity: 0 }}
       >
         <div>
-          <div className="mb-4 w-full bg-background sticky top-0 flex justify-between items-center p-2">
+          <div className="mb-4 w-full bg-background sticky top-0 flex justify-between items-center p-2 z-40">
             <h3 className="text-lg font-medium bg-background">Expenses</h3>
             <div className="flex justify-between">
               <Tabs
@@ -88,7 +90,7 @@ const PanelContent: React.FC<props> = ({ user }) => {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-              <Button>Add New</Button>
+              <CreateExpense />
             </div>
           </div>
           <div className="space-y-4 rounded-md w-full">

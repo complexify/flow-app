@@ -7,6 +7,27 @@
   src: url("../assets/fonts/Inter.var.woff2") format("woff2");
 }
 
+.custom-legend {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.legend-entry {
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.legend-text {
+  /* Add your text styling here */
+}
 
 @layer base {
   :root {
